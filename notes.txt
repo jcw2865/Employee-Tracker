@@ -1,0 +1,55 @@
+Psuedo-Code
+
+Ask the user what they want to do
+
+Add departments 
+    - What is the name of the department
+
+Add roles 
+    - What is the role title
+    - What is the role salary
+    - What is the role's department id
+
+Add employees
+    - What is their first name
+    - What is their last name
+    - What is their role
+    - What is their manager's id
+
+View departments 
+    - Which department would you like to View
+
+View roles 
+    - Which role would you like to View
+
+View employees
+    - Which employee would you like to View
+
+Update employee 
+    - Which employee would you like to Update
+        - What is their first name
+        - What is their last name
+        - What is their role
+        - What is their manager's id
+
+Update roles
+    - Which role would you like to Update
+        - What is the role title
+        - What is the role salary
+        - What is the role's department id
+
+
+
+
+
+
+
+Bonus points if you're able to:
+
+Update employee managers
+
+View employees by manager
+
+Delete departments, roles, and employees
+
+View the total utilized budget of a department -- ie the combined salaries of all employees in that department

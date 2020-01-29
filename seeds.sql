@@ -10,8 +10,8 @@ USE employeeDB;
 -- Create the table "employeeTable"
 CREATE TABLE employeeTable (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  firstName VARCHAR(30) NOT NULL,
-  lastName VARCHAR(30) NOT NULL,
+  firstName VARCHAR(50) NOT NULL,
+  lastName VARCHAR(50) NOT NULL,
   role_id INT,
   manager_id INT
 );
@@ -19,7 +19,7 @@ CREATE TABLE employeeTable (
 -- Create the table "roleTable"
 CREATE TABLE roleTable (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  title VARCHAR(30) NOT NULL,
+  title VARCHAR(50) NOT NULL,
   salary DECIMAL,
   department_id INT
 );
@@ -27,5 +27,15 @@ CREATE TABLE roleTable (
 -- Create the table "departmentTable"
 CREATE TABLE departmentTable (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  name VARCHAR(30) NOT NULL
+  name VARCHAR(50) NOT NULL
 );
+
+-- Create a few departments to start with
+INSERT INTO departmentTable (name)
+VALUES ("Department of Magical Law Enforcement"), ("Department of Mysteries"), ("Department of Magical Transportation");
+
+-- INSERT INTO departmentTable (name)
+-- VALUES ("Department of Mysteries");
+
+-- INSERT INTO departmentTable (name)
+-- VALUES ("Department of Magical Transportation");
