@@ -30,12 +30,14 @@ CREATE TABLE departmentTable (
   name VARCHAR(50) NOT NULL
 );
 
--- Create a few departments to start with
+-- Create a few departments to start with.
 INSERT INTO departmentTable (name)
 VALUES ("Department of Magical Law Enforcement"), ("Department of Mysteries"), ("Department of Magical Transportation");
 
--- INSERT INTO departmentTable (name)
--- VALUES ("Department of Mysteries");
+-- Create a few roles to start with.
+INSERT INTO roleTable (title, salary, department_id)
+VALUES ("Chief Warlock", 95000, 1), ("Head Witch", 95000, 2), ("Master Muggle Watcher", 80000, 3);
 
--- INSERT INTO departmentTable (name)
--- VALUES ("Department of Magical Transportation");
+-- Create a few employees to start with.
+INSERT INTO employeeTable (firstName, lastName, role_id, manager_id)
+VALUES ("Jimmy", "Stix", 1, 1), ("Bill", "Stickers", 3, 2), ("Patricia", "Bullbox", 2, 3);
