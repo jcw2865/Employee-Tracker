@@ -2,9 +2,10 @@ require("dotenv").config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
-// // Sets an initial port. We"ll use this later in our listener
+// Sets an initial port. We'll use this later in our listener
 // var PORT = process.env.PORT || 8080;
 
+// Create the server connection
 var connection = mysql.createConnection({
     host: "localhost",
 
@@ -19,11 +20,13 @@ var connection = mysql.createConnection({
     database: "employeeDB"
 });
 
+// Connect to the server, run the initial async function.
 connection.connect(function (err) {
     if (err) throw err;
     employeeTracker();
 });
 
+// Create an async function that will call the rest of the functions based off of the user's choice.
 async function employeeTracker() {
     try {
         const userSearch = await askUserForChoice();
@@ -37,14 +40,12 @@ async function employeeTracker() {
         } else if (userSearch === "Add Employee") {
             const newEmpInfo = await inquirer.prompt(newEmployeeQuestions)
             await addNewEmployee(newEmpInfo);
-        } else if (userSearch === "View Department") {
-            const viewDept = await inquirer.prompt(whichDept);
-            await displayDept(viewDept);
-            console.log("Again, you chose View Department")
-        } else if (userSearch === "View Role") {
-            console.log("Again, you chose View Role")
-        } else if (userSearch === "View Employee") {
-            console.log("Again, you chose View Employee")
+        } else if (userSearch === "View Departments") {
+            await displayDepts();
+        } else if (userSearch === "View Roles") {
+            await displayRoles();
+        } else if (userSearch === "View Employees") {
+            await displayEmployees();
         } else if (userSearch === "Update Employee") {
             console.log("Again, you chose Update Employee")
         } else if (userSearch === "Update Role") {
@@ -71,13 +72,15 @@ function askUserForChoice() {
         name: "firstQuestion",
         message: "What would you like to do?",
         type: "list",
-        choices: ["Add Department", "Add Role", "Add Employee", "View Department", "View Role", "View Employee", "Update Employee", "Update Role", "Exit"]
+        choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Update Employee", "Update Role", "Exit"]
     }]).then(response => response.firstQuestion)
 };
 
 // ===============
-// Add departments 
+// ===============
+// ADD DEPARTMENT
 // 1) Ask for dept name, 2) Add dept
+// ===============
 // ===============
 
 // This function asks the user what they'd like to name their new department and returns their answer.
@@ -103,8 +106,10 @@ function addNewDepartment(askDeptName) {
 };
 
 // ===============
-// Add role 
+// ===============
+// ADD ROLE
 // 1) Ask for role info, 2) Add role
+// ===============
 // ===============
 
 // This array of questions is asked in the "const newRoleInfo" declaration.
@@ -138,8 +143,10 @@ function addNewRole(newRoleInfo) {
 };
 
 // ===============
-// Add employee 
+// ===============
+// ADD EMPLOYEE 
 // 1) Ask for employee info, 2) Add employee
+// ===============
 // ===============
 
 // This array of questions is asked in the "const newEmployeeInfo" declaration.
@@ -178,40 +185,52 @@ function addNewEmployee(newEmpInfo) {
 };
 
 // ===============
-// View Department 
-// 1) Ask for department name, 2) Display department info
+// ===============
+// VIEW DEPARTMENTS 
+// 1) Display departments 
+// ===============
 // ===============
 
-// This array of questions is asked in the "const newEmployeeInfo" declaration.
-
-const newEmployeeQuestions = [
-    {
-        name: "deptName",
-        message: "What would you like to do?",
-        type: "list",
-        choices: ["Add Department", "Add Role", "Add Employee", "View Department", "View Role", "View Employee", "Update Employee", "Update Role", "Exit"]
-    }
-]
-
-// This function takes the user's input from the function askForRoleName and creates a new role with it.
-// The string askRoleName must be passed into mysql inside of single quotes.
-function addNewEmployee(newEmpInfo) {
-    connection.query("INSERT INTO employeeTable (firstName, lastName, role_id, manager_id) VALUE ('" + newEmpInfo.newEmpFirstName + "', '" + newEmpInfo.newEmpLastName + "', '" + newEmpInfo.empRoleId + "', '" + newEmpInfo.managerId + "')", function (err, result) {
+// This function creates a query to display all rows from the departmentTable, then returns to the beginning.
+function displayDepts() {
+    connection.query("SELECT * FROM departmentTable", function (err, result) {
         if (err) throw err;
-        console.log("New employee created!");
+        console.table(result);
         employeeTracker();
     });
 };
 
+// ===============
+// ===============
+// VIEW ROLES 
+// 1) Display roles 
+// ===============
+// ===============
 
-// // View departments 
-// function viewDepartments() { };
+// This function creates a query to display all rows from the departmentTable, then returns to the beginning.
+function displayRoles() {
+    connection.query("SELECT * FROM roleTable", function (err, result) {
+        if (err) throw err;
+        console.table(result);
+        employeeTracker();
+    });
+};
 
-// // View roles 
-// function viewRoles() { };
+// ===============
+// ===============
+// VIEW EMPLOYEES 
+// 1) Display employees 
+// ===============
+// ===============
 
-// // View employees
-// function viewEmployees() { };
+// This function creates a query to display all rows from the departmentTable, then returns to the beginning.
+function displayEmployees() {
+    connection.query("SELECT * FROM employeeTable", function (err, result) {
+        if (err) throw err;
+        console.table(result);
+        employeeTracker();
+    });
+};
 
 // // Update employee 
 // function updateEmployee() { };
