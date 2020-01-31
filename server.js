@@ -46,12 +46,11 @@ async function employeeTracker() {
             await displayRoles();
         } else if (userSearch === "View Employees") {
             await displayEmployees();
-        } else if (userSearch === "Update Employee") {
+        } else if (userSearch === "Update Employee Role") {
+            const updateEmpInfo = await inquirer.prompt(updateEmpQuestions)
+            await updateEmployeeRole(updateEmpInfo);
             console.log("Again, you chose Update Employee")
-        } else if (userSearch === "Update Role") {
-            console.log("Again, you chose Update Role")
-        }
-        else if (userSearch === "Exit") {
+        } else if (userSearch === "Exit") {
             console.log("Thanks for stopping by!");
             connection.end();
         }
@@ -66,13 +65,18 @@ async function employeeTracker() {
     }
 }
 
-// Ask user what they want to do
+// ===============
+// ===============
+// ASK USER FOR CHOICE
+// ===============
+// ===============
+
 function askUserForChoice() {
     return inquirer.prompt([{
         name: "firstQuestion",
         message: "What would you like to do?",
         type: "list",
-        choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Update Employee", "Update Role", "Exit"]
+        choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Update Employee Role", "Exit"]
     }]).then(response => response.firstQuestion)
 };
 
@@ -132,8 +136,8 @@ const newRoleQuestions = [
     }
 ]
 
-// This function takes the user's input from the function askForRoleName and creates a new role with it.
-// The string askRoleName must be passed into mysql inside of single quotes.
+// This function takes the user's input from the inquiry prompt and creates a new role with it.
+// The string newRoleInfo must be passed into mysql inside of single quotes.
 function addNewRole(newRoleInfo) {
     connection.query("INSERT INTO roleTable (title, salary, department_id) VALUE ('" + newRoleInfo.newRoleTitle + "', '" + newRoleInfo.newRoleSalary + "', '" + newRoleInfo.newDeptId + "')", function (err, result) {
         if (err) throw err;
@@ -174,8 +178,8 @@ const newEmployeeQuestions = [
     }
 ]
 
-// This function takes the user's input from the function askForRoleName and creates a new role with it.
-// The string askRoleName must be passed into mysql inside of single quotes.
+// This function takes the user's input from the inquiry prompt and creates a new employee with it.
+// The string newEmpInfo must be passed into mysql inside of single quotes.
 function addNewEmployee(newEmpInfo) {
     connection.query("INSERT INTO employeeTable (firstName, lastName, role_id, manager_id) VALUE ('" + newEmpInfo.newEmpFirstName + "', '" + newEmpInfo.newEmpLastName + "', '" + newEmpInfo.empRoleId + "', '" + newEmpInfo.managerId + "')", function (err, result) {
         if (err) throw err;
@@ -207,7 +211,7 @@ function displayDepts() {
 // ===============
 // ===============
 
-// This function creates a query to display all rows from the departmentTable, then returns to the beginning.
+// This function creates a query to display all rows from the roleTable, then returns to the beginning.
 function displayRoles() {
     connection.query("SELECT * FROM roleTable", function (err, result) {
         if (err) throw err;
@@ -223,7 +227,7 @@ function displayRoles() {
 // ===============
 // ===============
 
-// This function creates a query to display all rows from the departmentTable, then returns to the beginning.
+// This function creates a query to display all rows from the employeeTable, then returns to the beginning.
 function displayEmployees() {
     connection.query("SELECT * FROM employeeTable", function (err, result) {
         if (err) throw err;
@@ -232,8 +236,33 @@ function displayEmployees() {
     });
 };
 
-// // Update employee 
-// function updateEmployee() { };
 
-// // Update roles
-// function updateRole() { };
+// ===============
+// ===============
+// UPDATE EMPLOYEE ROLE
+// 1) Ask for employee ID, 2) Update employee
+// ===============
+// ===============
+
+// This array of questions is asked in the "const updateEmpInfo" declaration.
+const updateEmpQuestions = [
+    {
+        name: "empId",
+        message: "What is the ID of the employee you'd like to update? Please enter only numbers.",
+        type: "number"
+    },
+    {
+        name: "newRoleId",
+        message: "What is the role ID you'd like to give this employee? Please enter only numbers.",
+        type: "number"
+    }
+]
+
+// This function takes the user's input from the inquirer prompt updateEmpQuestions and update's the employee's role in the database
+function updateEmployeeRole(updateEmpInfo) {
+    connection.query("UPDATE employeeTable SET role_ID=? WHERE id=?", [updateEmpInfo.newRoleId, updateEmpInfo.empId], function (err, result) {
+        if (err) throw err;
+        console.log("Employee role updated!");
+        employeeTracker();
+    });
+};
