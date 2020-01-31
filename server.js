@@ -53,12 +53,10 @@ async function employeeTracker() {
         } else if (userSearch === "Exit") {
             console.log("Thanks for stopping by!");
             connection.end();
-        }
-        else {
+        } else {
             console.log("You somehow chose wrong.");
             connection.end();
         }
-
     } catch (err) {
         console.log(err)
         connection.end();

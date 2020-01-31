@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jcw2865/Employee-Tracker#readme",
   "dependencies": {
+    "chalk": "^3.0.0",
     "console.table": "^0.10.0",
     "dotenv": "^8.2.0",
     "inquirer": "^7.0.4",
